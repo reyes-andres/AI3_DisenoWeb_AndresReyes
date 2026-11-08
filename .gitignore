@@ -1,0 +1,16 @@
+
+# Credenciales de la base de datos (no se suben)
+config/config.php
+
+# Archivos de entorno
+.env
+
+# Logs
+*.log
+logs/
+
+# Archivos del sistema y del editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
