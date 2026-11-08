@@ -32,4 +32,17 @@ class Equipo
         // 3. Se ejecuta
         return $sentencia->execute();
     }
+
+    // Devuelve todos los equipos, del más reciente al más antiguo
+    public function obtenerTodos(): array
+    {
+        $sql = 'SELECT id, nombre, tipo, marca, direccion_ip, ubicacion, estado, fecha_creacion
+                FROM equipos
+                ORDER BY id DESC';
+
+        $sentencia = $this->conexion->prepare($sql);
+        $sentencia->execute();
+
+        return $sentencia->fetchAll();
+    }
 }

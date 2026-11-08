@@ -1,5 +1,11 @@
 <?php
-// Vista principal: formulario de registro de equipos
+// Vista principal: formulario de registro y lista de equipos
+
+// Si se abre este archivo directamente, se envía al index
+if (!isset($equipos)) {
+    header('Location: ../index.php');
+    exit;
+}
 
 $mensaje = $mensaje ?? null;
 $error = $error ?? null;
@@ -13,6 +19,13 @@ $mensajesError = [
     'ip_duplicada' => 'Ya existe un equipo registrado con esa dirección IP.',
     'conexion' => 'Error al conectar con la base de datos.',
     'bd' => 'No se pudo guardar el equipo. Intenta de nuevo.',
+];
+
+// Color de la etiqueta según el estado
+$coloresEstado = [
+    'Activo' => 'success',
+    'Inactivo' => 'secondary',
+    'Mantenimiento' => 'warning',
 ];
 ?>
 <!DOCTYPE html>
@@ -100,6 +113,58 @@ $mensajesError = [
                                 Guardar
                             </button>
                         </form>
+                    </div>
+                </div>
+            </section>
+
+            <section class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        Equipos registrados (<?php echo count($equipos); ?>)
+                    </div>
+                    <div class="card-body">
+                        <!-- table-responsive agrega scroll horizontal en pantallas pequeñas -->
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nombre</th>
+                                        <th>Tipo</th>
+                                        <th>Marca</th>
+                                        <th>Dirección IP</th>
+                                        <th>Ubicación</th>
+                                        <th>Estado</th>
+                                        <th>Registrado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php if (count($equipos) === 0): ?>
+                                        <tr>
+                                            <td colspan="8" class="text-center text-muted">No hay equipos registrados.</td>
+                                        </tr>
+                                    <?php endif; ?>
+
+                                    <?php foreach ($equipos as $equipo): ?>
+                                        <tr>
+                                            <!-- htmlspecialchars convierte < > " ' & en texto para evitar XSS -->
+                                            <td><?php echo htmlspecialchars($equipo['id'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                            <td><?php echo htmlspecialchars($equipo['nombre'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                            <td><?php echo htmlspecialchars($equipo['tipo'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                            <td><?php echo htmlspecialchars($equipo['marca'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                            <td><?php echo htmlspecialchars($equipo['direccion_ip'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                            <td><?php echo htmlspecialchars($equipo['ubicacion'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                            <td>
+                                                <span class="badge text-bg-<?php echo $coloresEstado[$equipo['estado']] ?? 'secondary'; ?>">
+                                                    <?php echo htmlspecialchars($equipo['estado'], ENT_QUOTES, 'UTF-8'); ?>
+                                                </span>
+                                            </td>
+                                            <td><?php echo htmlspecialchars(date('d/m/Y H:i', strtotime($equipo['fecha_creacion'])), ENT_QUOTES, 'UTF-8'); ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </section>

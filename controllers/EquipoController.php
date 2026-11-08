@@ -5,15 +5,22 @@ require_once __DIR__ . '/../models/Equipo.php';
 
 class EquipoController
 {
-    // Muestra la página principal
+    // Muestra la página principal con la lista de equipos
     public function index(): void
     {
         $mensaje = $_GET['mensaje'] ?? null;
         $error = $_GET['error'] ?? null;
 
+        try {
+            $equipoModel = new Equipo();
+            $equipos = $equipoModel->obtenerTodos();
+        } catch (Exception $e) {
+            $equipos = [];
+            $error = 'conexion';
+        }
+
         require __DIR__ . '/../vistas/equipos.php';
     }
-
     // Recibe el formulario, valida y guarda
     public function guardar(): void
     {
