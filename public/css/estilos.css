@@ -1,5 +1,16 @@
+css
+
 /* Estilos propios del sistema */
 h1 {
     color: #142033;
     font-weight: 700;
+}
+
+.card {
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(20, 32, 51, 0.08);
+}
+
+.card-header {
+    font-weight: 600;
 }
